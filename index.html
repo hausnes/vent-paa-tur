@@ -11,9 +11,13 @@
     <form id="skjema">
         <h1>Legg deg til i køen</h1>
         <label for="navn">Navn:</label>
-        <input type="text" name="navn" id="navn">
+        <input type="text" name="navn" id="navn" required>
         <label for="tidsbruk">Estimert tidsbruk:</label>
-        <input type="range" name="tidsbruk" id="tidsbruk" min="1" max="2" step="1">
+        <input type="range" name="tidsbruk" id="tidsbruk" min="1" max="2" step="1" list="verdiar">
+        <datalist id="verdiar">
+            <option value="1" label="kort"></option>
+            <option value="2" label="lang"></option>
+          </datalist>
         <button type="submit">Registrer</button>
     </form>
     <main>
