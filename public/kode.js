@@ -31,10 +31,32 @@ async function hentOgOppdaterBrukarar() {
     }
 }
 
+// Legg til event listener for form submission
+const formLeggTilBruker = document.getElementById("formLeggTilBruker");
+formLeggTilBruker.addEventListener("submit", async (event) => {
+    event.preventDefault(); // Hindre standard form submission (SPA)
+
+    const brukernavn = document.getElementById("brukernavn").value;
+    const passord = document.getElementById("passord").value;
+
+    const response = await fetch("/addUser", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ brukernavn, passord })
+    });
+
+    if (response.ok) {
+        await hentOgOppdaterBrukarar(); // Oppdater lista med brukarar
+    } else {
+        console.error("Feil ved lagring av bruker");
+    }
+});
+
 // Alternativ til for-løkka over:
 //     users.forEach(user => {
 //         const li = document.createElement("li");
 //         li.textContent = user.brukernavn;
 //         liste.appendChild(li);
 //     });
-// }
