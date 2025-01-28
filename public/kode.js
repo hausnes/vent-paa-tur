@@ -25,7 +25,7 @@ async function hentOgOppdaterBrukarar() {
         for (let i = 0; i < users.length; i++) {
             const user = users[i];
             const li = document.createElement("li");
-            li.textContent = user.brukernavn + " (" + user.passord + " )";
+            li.textContent = user.navn;
             liste.appendChild(li);
         }
     }
@@ -36,15 +36,14 @@ const formLeggTilBruker = document.getElementById("formLeggTilBruker");
 formLeggTilBruker.addEventListener("submit", async (event) => {
     event.preventDefault(); // Hindre standard form submission (SPA)
 
-    const brukernavn = document.getElementById("brukernavn").value;
-    const passord = document.getElementById("passord").value;
+    const navn = document.getElementById("navn").value;
 
     const response = await fetch("/addUser", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ brukernavn, passord })
+        body: JSON.stringify({ navn })
     });
 
     if (response.ok) {
