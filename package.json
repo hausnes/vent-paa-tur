@@ -1,0 +1,16 @@
+{
+  "name": "vent-paa-tur",
+  "version": "1.0.0",
+  "description": "Køsystem for dei som har behov for den slags.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^11.8.1",
+    "express": "^4.21.2"
+  }
+}
