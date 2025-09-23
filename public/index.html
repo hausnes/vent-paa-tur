@@ -5,24 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vent på tur</title>
     <script src="kode.js" defer></script>
-    <link rel="stylesheet" href="stilark.css">
 </head>
 <body>
+    <h1>Vent på tur</h1>
+    
     <form id="formLeggTilBruker">
-        <h1>Treng du hjelp..?</h1>
-        <label for="navn">Navn:</label>
-        <input type="text" id="navn" name="navn" required>
+        <label for="brukernavn">Brukernavn:</label>
+        <input type="text" id="brukernavn" name="brukernavn" required>
         <br>
-        <button type="submit">Legg deg i kø!</button>
+        <label for="passord">Passord:</label>
+        <input type="password" id="passord" name="passord" required>
+        <br>
+        <button type="submit">Legg til bruker</button>
     </form>
 
-    <main>
-        <h1>Køen:</h1>
-        <ol id="liste">
-            <!-- fylles ut av JS -->
-            <li>Ingen i kø endå! Spring og registrer deg.</li>
-        </ol>
-        <button id="knappHentBrukarar">Oppdater køen manuelt</button>
-    </main>
+    <h2>Brukere:</h2>
+    <ul id="liste"></ul>
+    <button id="knappHentBrukarar">Hent brukarar</button>
 </body>
 </html>
