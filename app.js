@@ -46,6 +46,30 @@ app.use(session({
     cookie: { secure: false } // Sett til true med HTTPS
 }));
 
+// Middleware: Sjekk at bruker er innlogget
+function krevInnlogging(req, res, next) {
+    if (!req.session.personId) {
+        return res.status(401).json({ error: "Ikkje innlogget" });
+    }
+    next();
+}
+
+// Middleware: Sjekk at bruker eier fagkøen
+function krevEierskap(req, res, next) {
+    const { id } = req.params;
+    const fagko = db.prepare("SELECT person_id FROM fagko WHERE id = ?").get(id);
+    
+    if (!fagko) {
+        return res.status(404).json({ error: "Fagkø ikkje funne" });
+    }
+    
+    if (fagko.person_id !== req.session.personId) {
+        return res.status(403).json({ error: "Manglar tilgang" });
+    }
+    
+    next();
+}
+
 // API: Registrer ny lærer
 app.post("/api/registrer", async (req, res) => {
     const { navn, epost, passord } = req.body;
@@ -124,22 +148,14 @@ app.use("/privat", (req, res, next) => {
 app.use("/privat", express.static("privat"));
 
 // API: Hent alle fagkøer for innlogget bruker
-app.get("/api/fagkoer", (req, res) => {
-    if (!req.session.personId) {
-        return res.status(401).json({ error: "Ikkje innlogget" });
-    }
-
+app.get("/api/fagkoer", krevInnlogging, (req, res) => {
     const stmt = db.prepare("SELECT * FROM fagko WHERE person_id = ? ORDER BY opprettet DESC");
     const fagkoer = stmt.all(req.session.personId);
     res.json(fagkoer);
 });
 
 // API: Opprett ny fagkø
-app.post("/api/fagkoer", (req, res) => {
-    if (!req.session.personId) {
-        return res.status(401).json({ error: "Ikkje innlogget" });
-    }
-
+app.post("/api/fagkoer", krevInnlogging, (req, res) => {
     const { fagnavn } = req.body;
 
     if (!fagnavn) {
@@ -229,14 +245,8 @@ app.post("/api/fagko/:id/registrer-elev", (req, res) => {
 });
 
 // API: Marker køoppføring som ferdig (krever innlogging og eierskap)
-app.patch("/api/fagko/:id/ko/:oppforingId/ferdig", (req, res) => {
-    if (!req.session.personId) return res.status(401).json({ error: "Ikkje innlogget" });
-
+app.patch("/api/fagko/:id/ko/:oppforingId/ferdig", krevInnlogging, krevEierskap, (req, res) => {
     const { id, oppforingId } = req.params;
-
-    const fagko = db.prepare("SELECT person_id FROM fagko WHERE id = ? AND aktiv = 1").get(id);
-    if (!fagko) return res.status(404).json({ error: "Fagkø ikkje funne" });
-    if (fagko.person_id !== req.session.personId) return res.status(403).json({ error: "Manglar tilgang" });
 
     const stmt = db.prepare("UPDATE kooppforinger SET ferdig = 1 WHERE id = ? AND fagko_id = ?");
     const result = stmt.run(oppforingId, id);
@@ -246,14 +256,8 @@ app.patch("/api/fagko/:id/ko/:oppforingId/ferdig", (req, res) => {
 });
 
 // API: Hent statistikk for en fagkø (kun antall ganger hjulpet)
-app.get("/api/fagko/:id/statistikk", (req, res) => {
-    if (!req.session.personId) return res.status(401).json({ error: "Ikkje innlogget" });
-
+app.get("/api/fagko/:id/statistikk", krevInnlogging, krevEierskap, (req, res) => {
     const { id } = req.params;
-    
-    const fagko = db.prepare("SELECT person_id FROM fagko WHERE id = ?").get(id);
-    if (!fagko) return res.status(404).json({ error: "Fagkø ikkje funne" });
-    if (fagko.person_id !== req.session.personId) return res.status(403).json({ error: "Manglar tilgang" });
 
     try {
         const elevStats = db.prepare(`
@@ -273,14 +277,8 @@ app.get("/api/fagko/:id/statistikk", (req, res) => {
 });
 
 // API: Slett fagkø (krever innlogging og eierskap)
-app.delete("/api/fagkoer/:id", (req, res) => {
-    if (!req.session.personId) return res.status(401).json({ error: "Ikkje innlogget" });
-
+app.delete("/api/fagkoer/:id", krevInnlogging, krevEierskap, (req, res) => {
     const { id } = req.params;
-    
-    const fagko = db.prepare("SELECT person_id FROM fagko WHERE id = ?").get(id);
-    if (!fagko) return res.status(404).json({ error: "Fagkø ikkje funne" });
-    if (fagko.person_id !== req.session.personId) return res.status(403).json({ error: "Manglar tilgang" });
 
     const stmt = db.prepare("DELETE FROM fagko WHERE id = ?");
     const result = stmt.run(id);
