@@ -138,23 +138,21 @@ async function lastStatistikk() {
         const stats = await response.json();
 
         if (!Array.isArray(stats) || stats.length === 0) {
-            container.innerHTML = "<p style='color: #999; font-size: 14px;'>Ingen har fått hjelp ennå.</p>";
+            container.innerHTML = "<p>Ingen har fått hjelp ennå.</p>";
             return;
         }
 
-        let html = "<p style='font-size: 14px; color: #666; margin-bottom: 10px;'>Antal gonger hjulpet:</p>";
-        html += "<ul style='list-style: none; padding: 0;'>";
+        let html = "<p>Antal gonger hjulpet:</p>";
+        html += "<ul>";
         
         stats.forEach(stat => {
-            html += `<li style='padding: 6px 10px; margin: 5px 0; background: #f8f9fa; border-radius: 4px; border-left: 3px solid #667eea; font-size: 14px;'>`;
-            html += `<strong>${stat.elevnavn}</strong>: ${stat.antallGonger} ${stat.antallGonger === 1 ? 'gong' : 'gonger'}`;
-            html += `</li>`;
+            html += `<li><strong>${stat.elevnavn}</strong>: ${stat.antallGonger} ${stat.antallGonger === 1 ? 'gong' : 'gonger'}</li>`;
         });
 
         html += "</ul>";
         container.innerHTML = html;
     } catch (error) {
-        container.innerHTML = "<p style='color: #999; font-size: 14px;'>Feil ved lasting av statistikk.</p>";
+        container.innerHTML = "<p>Feil ved lasting av statistikk.</p>";
     }
 }
 

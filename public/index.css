@@ -137,6 +137,12 @@ a:hover {
     border-top: 1px solid #eee;
 }
 
+.elev-info {
+    margin-top: 0;
+    color: #999;
+    font-size: 14px;
+}
+
 @media (max-width: 768px) {
     .sections {
         grid-template-columns: 1fr;
