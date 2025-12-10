@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Køsystem</title>
+    <script src="/ko.js" defer></script>
+    <link rel="stylesheet" href="/ko.css">
+</head>
+<body>
+    <div id="innhold">
+        <h1 id="fagnamn">Lastar fagkø...</h1>
+        <div class="container">
+            <div class="panel">
+                <h2>Registrer deg i køen</h2>
+                <form id="formRegistrerElev">
+                    <label for="elevnavn">Ditt namn:</label>
+                    <input type="text" id="elevnavn" name="elevnavn" required>
+                    <label for="tidsbruk">Estimert tidsbruk:</label>
+                    <select id="tidsbruk" name="tidsbruk" required>
+                        <option value="">Velg</option>
+                        <option value="1">Kort (inntil 10 min)</option>
+                        <option value="2">Lang (meir enn 10 min)</option>
+                    </select>
+                    <button type="submit">Registrer i køen</button>
+                </form>
+                <div id="meldingRegistrering"></div>
+            </div>
+            
+            <div class="panel">
+                <span class="auto-refresh-indicator">Oppdaterer automatisk</span>
+                <h2>Køen</h2>
+                <ol id="koListe">
+                    <li>Lastar køen...</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

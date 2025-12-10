@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Køadministrator</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="dashboard.js" defer></script>
+</head>
+<body>
+    <div class="header">
+        <h1>📚 Køadministrator</h1>
+        <div class="header-info">
+            <p>Logget inn som: <span id="brukerNavn">Lastar...</span></p>
+            <button id="loggUt">Logg ut</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="panel">
+            <h2>Opprett ny fagkø</h2>
+            <form id="formNyFagko">
+                <label for="fagnavn">Fagnavn:</label>
+                <input type="text" id="fagnavn" name="fagnavn" placeholder="F.eks. Matematikk 1A" required>
+                <button type="submit">Opprett fagkø</button>
+            </form>
+            <div id="meldingFagko"></div>
+        </div>
+
+        <div class="panel">
+            <h2>Dine fagkøer</h2>
+            <div id="fagkoerContainer">
+                <p style="color: #999; text-align: center; padding: 20px;">Lastar fagkøer...</p>
+            </div>
+        </div>
+
+        <div id="koAdmin" class="panel" style="display:none;">
+            <h2>Administrer køen</h2>
+            <h3 id="koTittel">Køen</h3>
+            <ol id="koListeAdmin">
+                <li>Vel eit fag for å sjå køen.</li>
+            </ol>
+            
+            <h3 style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">Statistikk</h3>
+            <div id="statistikkContainer">
+                <p style="color: #999; font-size: 14px;">Lastar statistikk...</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
