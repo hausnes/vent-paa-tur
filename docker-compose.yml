@@ -1,0 +1,33 @@
+# Docker Compose konfigurasjon for å køyre Vent på tur
+services:
+  vent-paa-tur:
+    # Bygg Docker-image frå Dockerfile i denne mappa
+    build: .
+    
+    # Namn på containeren som vil synast i Docker (Desktop)
+    container_name: vent-paa-tur
+    
+    # Miljøvariabler som appen treng
+    environment:
+      # VIKTIG: Endre dette til ein sterk, tilfeldig streng før produksjon!
+      # Generer: openssl rand -base64 32
+      SESSION_SECRET: "endre-meg-til-ein-sterk-hemmeleg-nokkel"
+      # Port som appen skal lytte på inne i containeren
+      PORT: "3000"
+    
+    # Kva porter som skal vere tilgjengelege frå datamaskinen
+    # Format: "vert-port:container-port"
+    ports:
+      - "3000:3000"
+    
+    # Volum for å lagra data permanent (går ikkje tapt ved restart)
+    # brukere.db og andre filer lagras i volumet "vent-db"
+    volumes:
+      - vent-db:/app
+    
+    # Start automatisk på nytt viss appen kræsjer eller serveren startar på nytt
+    restart: unless-stopped
+
+# Opprett eit volum for permanent datalagring
+volumes:
+  vent-db:

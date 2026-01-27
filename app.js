@@ -6,6 +6,15 @@ const db = new Database("brukere.db");
 const bcrypt = require("bcrypt");
 const session = require("express-session");
 
+const SESSION_SECRET = process.env.SESSION_SECRET;
+const PORT = process.env.PORT || 3000;
+
+// Sikkerheit: SESSION_SECRET MÅ vere satt
+if (!SESSION_SECRET) {
+    console.error("FEIL: SESSION_SECRET miljøvariabel er ikkje sett!");
+    process.exit(1);
+}
+
 // Initialiser databasen og opprett tabellen dersom den ikkje finst
 db.exec(`
     CREATE TABLE IF NOT EXISTS person (
@@ -40,7 +49,7 @@ app.use(express.json()); // Legg til innebygd body-parser middleware
 
 // Session-oppsett
 app.use(session({
-    secret: "ditt-hemmelige-nøkkel-bytt-meg",
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false } // Sett til true med HTTPS
@@ -292,6 +301,6 @@ app.get("/ko/:id", (req, res) => {
     res.sendFile(__dirname + "/public/ko.html");
 });
 
-app.listen(3000, () => {
-    console.log("Server is running! http://localhost:3000");
+app.listen(PORT, () => {
+    console.log(`Server is running! http://localhost:${PORT}`);
 });
